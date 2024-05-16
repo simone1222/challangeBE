@@ -14,16 +14,17 @@ import com.progetto.challangeFilm.model.FilmEntity;
 public interface FilmRepository extends JpaRepository<FilmEntity, Long> {
 
 	 @Query("SELECT f FROM FilmEntity f WHERE f.dataInizio > :oggi")
-	List<FilmEntity> filmInProgrammazione(Date oggi);
+	 	List<FilmEntity> filmInProgrammazione(Date oggi);
 
 	 @Query("SELECT f FROM FilmEntity f WHERE f.dataInizio < :oggi")
 		List<FilmEntity> filmStorico(Date oggi);
 	 
-
-//	    @Query("SELECT f FROM FilmEntity f WHERE f.dataInizio >= :dataInizio AND f.dataFine <= :dataFine")
-//	    List<FilmEntity> findByDateRange(@Param("dataInizio") Date dataInizio, @Param("dataFine") Date dataFine);
 	    
-	    @Query("SELECT f FROM FilmEntity f WHERE f.dataInizio <= :dataFine AND f.dataFine >= :dataInizio")
-	    List<FilmEntity> findByDateRange(@Param("dataInizio") Date dataInizio, @Param("dataFine") Date dataFine);
+	 @Query("SELECT f FROM FilmEntity f WHERE (f.dataInizio <= :dataFine AND f.dataFine >= :dataInizio) OR (f.dataInizio <= :dataInizio AND f.dataFine >= :dataInizio AND f.dataFine <= :dataFine)")
+	 	List<FilmEntity> findByDateRange(@Param("dataInizio") Date dataInizio, @Param("dataFine") Date dataFine);
+
+	    
+	 	List<FilmEntity> findByDataInizio(Date dataInizio);
+
 
 	}
