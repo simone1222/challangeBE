@@ -16,7 +16,8 @@ public class FilmServiceImpl implements FilmService {
 	@Autowired
 	private FilmRepository filmRepository;
 	
-    private static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd");
+    private static final SimpleDateFormat DATE_FORMAT =  new SimpleDateFormat("yyyy-MM-dd");
+
 
 
 	@Override
@@ -38,21 +39,26 @@ public class FilmServiceImpl implements FilmService {
 	public List<FilmEntity> findFilmByDateRange(String dataInizio, String dataFine) {
 		//Ricerca dei film nei range desiderati
 	    if (dataInizio != null && dataFine != null) {
-	        try {
-	            Date dateStart = DATE_FORMAT.parse(dataInizio);
-	            Date dateEnd = DATE_FORMAT.parse(dataFine);
-	            return filmRepository.findByDateRange(dateStart, dateEnd);
-	        } catch (ParseException e) {
-	            throw new RuntimeException("Invalid date format", e);
-	        }
+			    try {
+					Date dateEnd =  DATE_FORMAT.parse(dataFine);
+					Date dateStart =  DATE_FORMAT.parse(dataInizio);
+					List<FilmEntity> findByDateRange = filmRepository.findByDateRange(dateStart,dateEnd);
+					return findByDateRange;
+
+				} catch (ParseException e) {
+					e.printStackTrace();
+				}
+//			
+			
 	    } else if (dataInizio != null) {
-	        // Se la data di fine non è specificata, cerca solo i film che iniziano con quella data
-	        try {
-	            Date dateStart = DATE_FORMAT.parse(dataInizio);
-	            return filmRepository.findByDataInizio(dateStart);
-	        } catch (ParseException e) {
-	            throw new RuntimeException("Invalid date format", e);
-	        }
+	        Date dateStart;
+			try {
+				dateStart = DATE_FORMAT.parse(dataInizio);
+				return filmRepository.findByDataInizio(dateStart);
+
+			} catch (ParseException e) {
+				e.printStackTrace();
+			}
 	  
 	}
 		return null;
